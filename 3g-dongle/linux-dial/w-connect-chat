@@ -1,0 +1,15 @@
+# cat /etc/ppp/peers/w-connect-chat
+
+TIMEOUT  15
+''   	ATZ
+OK	ATQ0
+OK	ATV1
+OK	ATE1
+OK	ATS0=0
+OK	AT&C1
+OK	AT&D2
+OK       AT+CGDCONT=1,"IP","TWWCDMA"
+# Set your APN replace TWWCDMA
+#OK     AT+CGEQREQ=1,2,0,0,0,0,0,1500,"0E0","0E0",,0,0
+OK        ATDT*99#
+CONNECT   ''

@@ -1,0 +1,13 @@
+/dev/ttyUSB3
+460800
+modem
+debug
+nodetach
+usepeerdns
+defaultroute
+user twuser
+password twpassword
+0.0.0.0:0.0.0.0
+lcp-echo-interval 120
+asyncmap 0xa0000
+connect 'chat -s -v -f /etc/ppp/peers/w-connect-chat'

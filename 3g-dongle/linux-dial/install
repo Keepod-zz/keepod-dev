@@ -1,0 +1,103 @@
+#!/bin/bash
+
+#INSTALL_PATH=`echo $0 | sed 's/install//'`
+INSTALL_PATH=`dirname $0`
+echo $INSTALL_PATH
+
+echo "..................start install................."
+#echo -n "*** Check for root..."
+if [ $EUID -ne 0 ]; then
+	echo -e "*** Install failed."
+	echo "*** Please install in root account."
+       read -p "press any key to exit.... " -n 1
+	exit -1
+fi
+
+cp w-connect-chat w-connect-chat-bak
+cp wcdma wcdma-bak
+
+read -p "Please input your APN:" yourapn
+#sed -i "S/\TWWCDMA/g" 'find .
+find ./ -name "w-connect-chat" | xargs sed -i 's/TWWCDMA/'$yourapn'/g'
+
+
+
+read -p "Please input your user name(no user name,press ENTER  key):" youruser
+if [ -z ${youruser} ]
+  then
+  find ./ -name "wcdma" | xargs sed -i 's/user twuser/user/'
+else
+  find ./ -name "wcdma" | xargs sed -i 's/twuser/"'$youruser'"/g'  
+fi
+
+read -p "Please input your password(no password,press ENTER  key):" yourpassword
+if [ -z ${yourpassword} ]
+   then
+   find ./ -name "wcdma" | xargs sed -i 's/password twpassword/password/'
+else
+   find ./ -name "wcdma" | xargs sed -i 's/twpassword/"'$yourpassword'"/g'   
+fi
+
+#delete previous dial script
+#TMP_FILE=/etc/udev/rules.d/cdrom-datacard.rules
+#if [ -f $TMP_FILE ];then
+#      rm -f $TMP_FILE
+#      echo ..........delete first $TMP_FILE ok...........
+#fi
+      
+
+TMP_FILE=/etc/ppp/peers/wcdma
+if [ -f $TMP_FILE ];then
+	rm -f $TMP_FILE
+      echo ..........delete first $TMP_FILE ok...........
+fi
+      
+TMP_FILE=/etc/ppp/peers/w-connect-chat 
+if [ -f $TMP_FILE ];then
+	rm -f $TMP_FILE
+      echo ..........delete second $TMP_FILE ok...........     
+fi
+
+TMP_FILE=/sbin/dialup 
+if [ -f $TMP_FILE ];then
+	rm -f $TMP_FILE
+      echo ..........delete third $TMP_FILE ok...........     
+fi
+
+#build new rules
+#TMP_FILE=$INSTALL_PATH/cdrom-datacard.rules
+#cp -f $TMP_FILE /etc/udev/rules.d/cdrom-datacard.rules
+
+#if [ -f /sbin/udevadm ]
+#then
+#      udevadm control reload_rules
+#      udevadm trigger --subsystem-match=block
+#      echo "udevadm is exit!"
+#else
+#      udevcontrol reload_rules
+#      udevtrigger --subsystem-match=block
+#      echo "udevadm isn't exit!"
+#fi
+
+
+#INSTALL_PATH=$PWD
+cp $INSTALL_PATH/wcdma /etc/ppp/peers/
+cp $INSTALL_PATH/w-connect-chat /etc/ppp/peers/
+cp $INSTALL_PATH/dialup /sbin/
+chmod 777 /etc/ppp/peers/wcdma
+chmod 777 /etc/ppp/peers/w-connect-chat
+chmod 777 /sbin/dialup
+
+#resume the apn value
+#find ./ -name "w-connect-chat" | xargs sed -i $yourapn'/TWWCDMA/'
+
+mv -f w-connect-chat-bak w-connect-chat
+mv -f wcdma-bak wcdma
+
+echo "install completed!!!."
+read -p "press any key to exit.... " -n 1
+exit -1
+
+
+
+

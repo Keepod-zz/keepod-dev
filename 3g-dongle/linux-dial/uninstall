@@ -1,0 +1,42 @@
+#!/bin/bash
+
+
+echo "..................start uninstall................."
+#echo -n "*** Check for root..."
+if [ $EUID -ne 0 ]; then
+	echo -e "*** Uninstall failed."
+	echo "*** Please uninstall in root account."
+        read -p "press any key to exit.... " -n 1
+	exit -1
+fi
+
+
+#delete previous dial script
+TMP_FILE=/etc/ppp/peers/wcdma
+if [ -f $TMP_FILE ];then
+	rm -f $TMP_FILE
+      echo ..........delete first $TMP_FILE ok...........
+fi
+      
+TMP_FILE=/etc/ppp/peers/w-connect-chat 
+if [ -f $TMP_FILE ];then
+	rm -f $TMP_FILE
+      echo ..........delete second $TMP_FILE ok...........     
+fi
+
+TMP_FILE=/sbin/dialup 
+if [ -f $TMP_FILE ];then
+	rm -f $TMP_FILE
+      echo ..........delete third $TMP_FILE ok...........     
+fi
+
+#delete previous dial script
+#TMP_FILE=/etc/udev/rules.d/cdrom-datacard.rules
+#if [ -f $TMP_FILE ];then
+#	rm -f $TMP_FILE
+#      echo ..........delete fourth $TMP_FILE ok...........
+#fi
+echo "uninstall completed!!!"
+
+read -p "press any key to continue.... " -n 1
+

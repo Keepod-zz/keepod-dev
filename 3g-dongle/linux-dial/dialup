@@ -1,0 +1,37 @@
+#!/bin/bash
+
+export PATH={$PATH}:/sbin
+echo "$PATH"
+
+echo "...............................start dial up..............................."
+#echo -n "*** Check for root..."
+
+
+if [ $EUID -ne 0 ]; then
+       echo -e "*** Dialup failed."
+       echo "*** Please dialup in root account."
+       read -p "Press any key to exit.... " -n 1
+       exit -1
+fi
+
+#read -p "Please input your APN:" $yourapn
+#sed -i "S/\TWWCDMA/g" 'find .
+#find ./ -name "w-connect-chat" | xargs sed -i 's/TWWCDMA/3gnet/'
+
+
+#sudo modprobe option
+#sudo chmod 777 /sys/bus/usb-serial/drivers/option1/new_id
+#sudo echo 05C6 0016 > /sys/bus/usb-serial/drivers/option1/new_id
+
+/bin/sleep 3s
+
+if [ "$(/bin/ls /dev/ttyUSB* |/bin/grep "ttyUSB3")" != "" ]
+    then
+       echo "now connect to the internet......" -n 1
+       pppd call wcdma &
+       read -p "wait for dial up.... " -n 1
+else
+    echo "Please check the datacard is plugged in and the cdrom has been ejected!"
+    read -p "Press any key to exit.... " -n 1
+    exit -1
+fi
